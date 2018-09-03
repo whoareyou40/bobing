@@ -6,14 +6,10 @@ import random
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-zy = 1
-dt = 2
-sh = 4
-sj = 8
-ej = 16
-yx = 32
+
 result = u"没有"
 totalhand = 0
+Peoplelist = []
 
 totalzy = 0
 totaldt = 0
@@ -21,8 +17,19 @@ totalsh = 0
 totalsj = 0
 totalej = 0
 totalyx = 0
+
+totalcjh = 0
+totallbh = 0
+totallbhei = 0
 #当前状元
 currentzy  = {1: 0, 2:0, 3:0,4:0,5:0}
+
+zy = 1
+dt = 2
+sh = 4
+sj = 8
+ej = 16
+yx = 32
 
 
 class People(object):
@@ -51,12 +58,12 @@ def countzy(currentzy={}):
     return 
 
 #判断大小函数
-def my_count(h=[],p=0):
+def my_count(hand=[],p=0):
     global Peoplelist
     global yx,zy,dt,sh,sj,ej,result
-    global totalzy,totaldt,totalsh,totalsj,totalej,totalyx,currentzy
+    global totalzy,totaldt,totalsh,totalsj,totalej,totalyx,totalcjh,totallbh,totallbhei,currentzy
     dic={1:0,2:0,3:0,4:0,5:0,6:0}
-    for item in h:
+    for item in hand:
         dic[item] = dic.get(item, 0) + 1
     #print dic
     if dic[4]==6:
@@ -65,6 +72,7 @@ def my_count(h=[],p=0):
         Peoplelist[p].zy = Peoplelist[p].zy+1
         result =u'六勃红'
         currentzy[p] = 6.1
+        totallbh = totallbh+1
         return
     elif dic[1] == 6 or dic[2] == 6 or dic[3] == 6 or dic[5] == 6 or dic[6] == 6:
         zy = 0
@@ -72,6 +80,15 @@ def my_count(h=[],p=0):
         totalzy = totalzy + 1
         Peoplelist[p].zy = Peoplelist[p].zy+1
         currentzy[p] = 6.0
+        totallbhei = totallbhei+1
+        return
+    elif dic[4] == 4 and dic[1] == 2:
+        zy = 0
+        result =u'状元插金花'
+        totalzy = totalzy + 1
+        totalcjh = totalcjh+1
+        Peoplelist[p].zy = Peoplelist[p].zy+1
+        currentzy[p] = 5.9
         return
     elif dic[4] == 5 :
         zy = 0
@@ -159,57 +176,89 @@ def my_count(h=[],p=0):
 
 #开始一次博饼
 #创建一个随机数组
-
-Cheng = People("Cheng",0,0,0,0,0,0)
-Yue = People("Yue",0,0,0,0,0,0)
-Dolm = People("Dolm",0,0,0,0,0,0)
-TT = People("TT",0,0,0,0,0,0)
-Eva = People("Eva",0,0,0,0,0,0)
-
-Peoplelist = [Cheng,Yue,Dolm,TT,Eva]
-Peoples = 5
-p = 0
-while yx>0 or zy>0 or dt>0 or sh >0 or sj>0 or ej>0 or p<4:
-    hand = []
-    n = 1
-
-#随机博一次饼
-    while n <= 6:
-        hand.append(random.randint(1, 6))
-        n = n + 1
-#判断大小
-    my_count(hand,p)
-    p = p + 1
-    if p == Peoples:
-        p = 0
-    totalhand = totalhand +1
-
-countzy(currentzy)
  
  
-print totalzy,totaldt,totalsh,totalsj,totalej,totalyx
-print totalhand
-#print currentzy
-Cheng.print_score()
-Yue.print_score()
-Dolm.print_score()
-TT.print_score()
-Eva.print_score()
+
 
 
 class Bobing(object):
 
-    def __init__(self,times,peoples):
-        self.times = times
+    def __init__(self,peoples=5):
         self.peoples = peoples
 
     def start(self):
-        pass
+        #初始化
+        global zy 
+        global dt 
+        global sh 
+        global sj 
+        global ej 
+        global yx 
+        zy = 1
+        dt = 2
+        sh = 4
+        sj = 8
+        ej = 16
+        yx = 32
+        global totalhand 
+        global Peoplelist
+        global Cheng,Yue,Dolm,TT,Eva
+        #创建循环
+        Cheng = People("Cheng",0,0,0,0,0,0)
+        Yue = People("Yue",0,0,0,0,0,0)
+        Dolm = People("Dolm",0,0,0,0,0,0)
+        TT = People("TT",0,0,0,0,0,0)
+        Eva = People("Eva",0,0,0,0,0,0)
+
+        Peoplelist = [Cheng,Yue,Dolm,TT,Eva]
+        Peoples = 5
+        #第几个人
+        p = 0
+        while yx> 0 or zy> 0 or dt> 0 or sh > 0 or sj> 0 or ej> 0 or p< 4:
+            hand = []
+            n = 1
+#随机博一次饼
+            while n <= 6:
+               hand.append(random.randint(1, 6))
+               n = n + 1
+#判断大小
+            my_count(hand,p)
+            p = p + 1
+            if p == Peoples:
+                p = 0
+            totalhand = totalhand +1
+            countzy(currentzy)
 
     def print_score(self):
-        pass
+        print totalzy,totaldt,totalsh,totalsj,totalej,totalyx
+        print totalhand
+        #Cheng.print_score()
+        #Yue.print_score()
+        #Dolm.print_score()
+        #TT.print_score()
+        #Eva.print_score()
+#模拟器
+class Simulator(object):
+    def __init__(self,times,peoples,th):
+       self.times = times
+       self.peoples = peoples
+       self.th = th
+    def start(self):
+        i = 0
+        while i< self.times:
+           Mybobing = Bobing(self.peoples)
+           Mybobing.start() 
+           i = i + 1
+        
+    def print_score(self):
+        print totallbh,totallbhei,totalcjh,totalzy,totaldt,totalsh,totalsj,totalej,totalyx
+        print totalhand
 
 
+myS = Simulator(100000,5,0)
+myS.start()
+myS.print_score()
+#Mybobing.print_score()
 
 
 

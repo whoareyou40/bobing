@@ -6,11 +6,9 @@ import random
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-
 result = u"没有"
 totalhand = 0
 Peoplelist = []
-
 totalzy = 0
 totaldt = 0
 totalsh = 0
@@ -25,11 +23,9 @@ totalnzj = 0
 #currentzy  = {1: 0, 2:0, 3:0,4:0,5:0}
 
 
-
-
 class People(object):
 
-    def __init__(self,name,yx,ej,sj,sh,dt,zy):
+    def __init__(self, name, yx, ej, sj, sh, dt, zy):
         self.name = name
         self.yx = yx
         self.ej = ej
@@ -37,12 +33,15 @@ class People(object):
         self.sh = sh
         self.dt = dt
         self.zy = zy
+
     def print_score(self):
-        print u'%s: 一秀:%s,二举:%s,四进:%s,三红:%s,对堂%s,状元:%s' % (self.name, self.yx,self.ej,self.sj,self.sh,self.dt,self.zy)
+        print u'%s: 一秀:%s,二举:%s,四进:%s,三红:%s,对堂%s,状元:%s' \
+              % (self.name, self.yx, self.ej, self.sj, self.sh, self.dt, self.zy)
+
 
 # 取出特定数字
 def guolvhanshu(num):
-    if num<>4:
+    if num != 4:
         return num
 
 
@@ -65,7 +64,7 @@ class Bobing(object):
             self.firstZy = p
         
     #判断大小
-    def my_count(self,hand=[],p=0):
+    def my_count(self, hand=[], p=0):
         global Peoplelist,result
         global totalzy,totaldt,totalsh,totalsj,totalej,totalyx,totalcjh,totallbh,totallbhei
 
@@ -214,11 +213,11 @@ class Bobing(object):
         while self.bing['yx']> 0 or self.bing['zy']> 0 or self.bing['dt']> 0 or self.bing['sh'] > 0 or self.bing['sj']> 0 or self.bing['ej']> 0 or p < 4:
             hand = []
             n = 1
-#随机博一次饼
+            #随机博一次饼
             while n <= 6:
                hand.append(random.randint(1, 6))
                n = n + 1
-#判断大小
+            #判断大小
             self.my_count(hand,p)
             p = p + 1
             if p == Peoples:
@@ -247,11 +246,21 @@ class Simulator(object):
            i = i + 1
         
     def print_score(self):
-        print totallbh,totallbhei,totalcjh,totalzy,totaldt,totalsh,totalsj,totalej,totalyx,totalnzj
-        print totalhand
+        print ('总手数: %s',totalhand)
+        print ('六勃红:次数 %s 概率: %.5f%%' %  (totallbh,float(totallbh)/float(totalhand)*100))
+        print ('六勃黑: %s 概率: %.5f%%' % (totalsj,float(totallbhei)/float(totalhand)*100))
+        print ('状元插金花: %s 概率: %.5f%%' % (totalcjh, float(totalcjh)/float(totalhand) * 100))
+        print ('对堂:次数 %s 概率: %.5f%%' % (totaldt, float(totaldt) / float(totalhand) * 100))
+        print ('三红:次数 %s 概率: %.5f%%' % (totalsh, float(totalsh) / float(totalhand) * 100))
+        print ('四进:次数 %s 概率: %.5f%%' % (totalsj, float(totalsj) / float(totalhand) * 100))
+        print ('二举:次数 %s 概率: %.5f%%' % (totalej, float(totalej) / float(totalhand) * 100))
+        print ('一秀:次数 %s 概率: %.5f%%' % (totalyx, float(totalyx) / float(totalhand) * 100))
+        print ('逆转: %s 概率 %.5f%%' % (totalnzj,float(totalnzj)/100000))
+        print totallbhei,totalcjh,totalzy,totaldt,totalsh,totalsj,totalej,totalyx,totalnzj
 
 
-myS = Simulator(100000,5,0)
+
+myS = Simulator(100000 ,5 ,0 )
 myS.start()
 myS.print_score()
 #Mybobing.print_score()
